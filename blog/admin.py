@@ -1,5 +1,5 @@
 from django.contrib import admin
-from blog.models import Tag, Post
+from blog.models import Tag, Post, Comment
 
 admin.site.register(Tag)
 
