@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load blog_extras %}
+{% load blog_extras cache %}
 {% block content %}
 <h2>{{ post.title }}</h2>
 {% row %}
@@ -18,7 +18,10 @@
 
 {% row %}
     {% col %}
-        {% recent_posts post %}
+    <!--adding post arg, the cache will be specific to each post just like vary_on_cookie-->
+        {% cache 3600 recent_posts post %}
+            {% recent_posts post %}
+        {% endcache %}
     {% endcol %}
 {% endrow %}
 
