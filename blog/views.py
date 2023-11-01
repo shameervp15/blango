@@ -17,7 +17,7 @@ def index(request):
 #   from django.http import HttpResponse
 #   return HttpResponse(str(request.user).encode("ascii"))
   
-  posts = Post.objects.filter(published_at__lte=timezone.now())
+  posts = Post.objects.filter(published_at__lte=timezone.now()).order_by('-published_at').select_related("author") #adding and you can see the changes in sql debug by removing one col .only("title", "summary", "content", "author", "published_at", "slug") #db optimization using select_related() only(columns to fetch) and defer(remove cols to fetch)
   logger.debug("Got %d posts", len(posts))
   return render(request, "blog/index.html", {"posts" : posts})
 
@@ -43,3 +43,9 @@ def post_detail(request, slug):
         comment_form = None
     
     return render(request, "blog/post-detail.html", {"post": post, "comment_form":comment_form})
+
+
+#getipaddress
+def get_ip(request):
+  from django.http import HttpResponse
+  return HttpResponse(request.META['REMOTE_ADDR'])
