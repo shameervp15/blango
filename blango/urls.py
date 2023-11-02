@@ -16,13 +16,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from blango_auth.views import profile
+from blango_auth.forms import BlangoRegistrationForm
+from django_registration.backends.activation.views import RegistrationView
+
 import debug_toolbar
 from django.conf import settings
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("blog.urls"))
+
+    path('accounts/profile/', profile, name="profile"),
+    path('accounts/', include("django.contrib.auth.urls")),
+
+    path("", include("blog.urls")),
+
+    path("accounts/register/", RegistrationView.as_view(form_class=BlangoRegistrationForm), name="django_registration_register"),
+    path("accounts/", include("django_registration.backends.activation.urls")),
 ]
 
 if settings.DEBUG:
