@@ -7,6 +7,7 @@
 # from django.views.decorators.csrf import csrf_exempt
 
 from blog.models import Post
+from .permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
 
 from blog.api.serializers import PostSerializer
 
@@ -16,13 +17,14 @@ from blog.api.serializers import PostSerializer
 from rest_framework import generics
 
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+  queryset = Post.objects.all()
+  serializer_class = PostSerializer
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+  permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
+  queryset = Post.objects.all()
+  serializer_class = PostSerializer
 
 
 # @api_view(["GET", "POST"])
